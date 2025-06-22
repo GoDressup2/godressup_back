@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Import;
 // MyBatisConfig.java 설정 포함
 @Import(MyBatisConfig.class)
 // 설정된 패키지에서 빈을 찾아 등록
-@ComponentScan(basePackages = {"com.godressup.persistence", "com.godressup.service"})
+@ComponentScan(basePackages = {"com.godressup.persistence", "com.godressup.service", "com.godressup.util"})
 public class RootConfig {
 
 }

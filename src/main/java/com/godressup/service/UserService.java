@@ -10,4 +10,6 @@ public interface UserService {
 	public List<UserVO> readUserList() throws Exception;
 	public void updateUser(UserVO user) throws Exception;
 	public void deleteUser(String username) throws Exception;
+	
+	public boolean login(String username, String password) throws Exception;
 }

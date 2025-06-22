@@ -1,10 +1,12 @@
 package com.godressup.config;
 
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 import jakarta.servlet.Filter;
 
+@Configuration
 public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitializer {
 
 	// 서비스와 리파지토리 레이어의 빈 설정
