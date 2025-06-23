@@ -10,7 +10,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 @Component
 public class JwtUtil {
 
-	private String secret = "ggeunit"; // JWT 서명 시 사용하는 비밀키
+	private String secret = "ggeunit0very0strong0jwt0secret0key0123456789"; // JWT 서명 시 사용하는 비밀키
 	private long expirationMs = 3600000; // 1시간(토큰 유효 시간)
 	
 	public String generateToken(String username) {

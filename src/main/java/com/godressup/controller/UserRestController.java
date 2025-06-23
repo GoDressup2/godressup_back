@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -38,25 +39,35 @@ public class UserRestController {
 		return ResponseEntity.ok("회원가입 성공");
 	}
 	
+	@GetMapping("/ping")
+	public String ping() {
+		return "OK";
+	}
+	
 	// @PostMapping("/login")
 	@RequestMapping(value="/login", method=RequestMethod.POST)
-	public ResponseEntity<?> loginUser(@RequestBody UserVO userVO) throws Exception {
-		logger.info("로그인 요청: {}", userVO.getUsername());
+	public ResponseEntity<?> loginUser(@RequestBody Map<String, String> loginData) throws Exception {
+		String username = loginData.get("username");
+		String inputPassword = loginData.get("password");
 		
-		String username = userVO.getUsername();
-		String password = userVO.getPassword();
+		logger.info("로그인 요청: {}", username);
 		
-		// 1. 로그인 인증
-		boolean authenticated = userService.login(username, password);
+		// 1. DB에서 사용자 조회
+		UserVO user = userService.readUser(username);
 		
-		if(!authenticated) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 실패: 아이디 또는 비밀번호 오류");
+		if(user == null) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 실패: 사용자 없음");
+		}
+		
+		// 2. 비밀번호 비교
+		if(!user.getPassword().equals(inputPassword)) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 실패: 비밀번호 불일치");
 		}
 	
-		// 2. JWT 토큰 생성
+		// 3. JWT 토큰 생성
 		String token = jwtUtil.generateToken(username);
 			
-		// 3. 토큰을 JSON 형태로 응답
+		// 4. 토큰을 JSON 형태로 응답
 		Map<String, String> response = new HashMap<>();
 		response.put("token", token);
 			
